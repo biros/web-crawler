@@ -1,7 +1,7 @@
 package com.biros.webcrawler;
 
 import com.biros.webcrawler.util.UrlValidator;
-import com.biros.webcrawler.workflow.CrawlerWorkflow;
+import com.biros.webcrawler.workflow.ParallelCrawlerWorkflow;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,14 +24,18 @@ public class App {
         }
 
         String url = args[0];
-        int depth = Integer.parseInt(args[1]);
+
+        int depth = 0;
+        if (args.length >= 2) {
+            depth = Integer.parseInt(args[1]);
+        }
 
         if (!UrlValidator.isValid(url)) {
             log.log(Level.INFO, "The given url is invalid: {0}", url);
             return;
         }
 
-        CrawlerWorkflow crawlerWorkflow = new CrawlerWorkflow(url, depth);
-        crawlerWorkflow.doCrawl();
+        ParallelCrawlerWorkflow crawlerWorkflow = new ParallelCrawlerWorkflow(url, depth);
+        crawlerWorkflow.doCrawlParallel();
     }
 }

@@ -45,10 +45,14 @@ public class CrawlerWorkflow {
         }
         String response = HttpService.callUrl(url);
         List<String> urls = UrlFinder.findUrls(response, originalUrl);
-        for (String urlToVisit : urls) {
-            if (!visitedUrls.contains(urlToVisit)) { // this condition prevents cycles
-                crawl(urlToVisit, depth + 1);
+
+        urls.forEach((String foundUrl) -> {
+            if (!visitedUrls.contains(foundUrl)) {
+                crawl(foundUrl, depth + 1);
             }
-        }
+        });
     }
+
+
+
 }
