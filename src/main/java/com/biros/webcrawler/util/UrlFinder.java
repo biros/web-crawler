@@ -6,6 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UrlFinder {
+    private UrlFinder() {
+        /* This utility class should not be instantiated */
+    }
+
 
     /**
      * Function to find all urls in the html
@@ -19,18 +23,20 @@ public class UrlFinder {
         Pattern pattern = Pattern.compile("https?://[^\\s\"'<>]+");
         Matcher matcher = pattern.matcher(html);
 
-        String normalizedBaseUrl = baseUrl.replaceFirst("^https?://", "");
-        String httpBaseUrl = "http://" + normalizedBaseUrl;
-        String httpsBaseUrl = "https://" + normalizedBaseUrl;
-
         while (matcher.find()) {
             String url = matcher.group();
-            if (UrlValidator.isValid(url)
-                    && (url.startsWith(httpBaseUrl) || url.startsWith(httpsBaseUrl))) {
+            if (UrlValidator.isValid(url) && areUrlDomainsMatching(url, baseUrl)) {
                 urls.add(url);
             }
         }
 
         return urls;
+    }
+
+    private static boolean areUrlDomainsMatching(String url1, String url2) {
+        return UrlDomainExtractor.extractDomain(url1)
+                .flatMap(domain1 -> UrlDomainExtractor.extractDomain(url2)
+                        .map(domain1::equals))
+                .orElse(false);
     }
 }

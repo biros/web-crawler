@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 /**
  * This application crawls the webpage given as an argument and searches for additional urls. It navigates through the
  * pages to a specified depth or until all the links were visited once.
+ * args[0]: url to crawl
+ * args[1]: depth (use 0 for infinite crawl)
  */
 public class App {
     private static final Logger log = Logger.getLogger(App.class.getName());
